@@ -64,6 +64,16 @@ Numbers to expect while running:
 
 All cleaning is done in SQL. The raw table is never changed. Each stage builds a new table from the one before, so every step can be traced back.
 
+The script runs in this order, and each step has its own check query right before and after it:
+
+1. Profile the raw table: missing values, then duplicate rows, then a split of where the duplicates sit.
+2. Remove exact duplicates into `retail_clean`.
+3. Remove non-sale rows into `retail_sales`.
+4. Standardise stock codes to upper case.
+5. Clean descriptions: strip extra spaces, then give each stock code one name.
+6. Standardise country names.
+7. Build `retail_cancellations`, then the `retail_net` view, then reconcile the totals.
+
 | Table | What it holds |
 |---|---|
 | online_retail | The raw data, untouched |
